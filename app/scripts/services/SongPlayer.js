@@ -1,7 +1,18 @@
 (function() {
     function SongPlayer() {
+		
+		/**
+		* @desc SongPlayer variable created as empty hash
+		* @type {Object}
+		*/
+		
         var SongPlayer = {};
-		 
+		
+		/**
+		* @desc currentSong object set to null
+		* @type {Object}
+		*/
+		
 		var currentSong = null;
 		
 		/**
@@ -29,12 +40,26 @@
  
     		currentSong = song;
  		};
+		
+		/**
+		* @function playSong
+		* @desc playSong plays the currentBuzzObject, after checking that it's not already playing
+		* @param {Object} song
+		*/
 		 
+		var playSong = function(song) {
+			if (song !== currentBuzzObject) {
+				currentBuzzObject.play();
+				song.playing = true;
+			}
+		}
+		
 		SongPlayer.play = function(song) {
-			setSong(song);
-			currentBuzzObject.play();
-			song.playing = true;
-			} else if (currentSong === song) {
+			if (currentSong !== song) {
+				setSong(song);
+				playSong(song);
+			} 
+			else if (currentSong === song) {
 				if (currentBuzzObject.isPaused()) {
 					currentBuzzObject.play();
 				}
