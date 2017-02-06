@@ -13,7 +13,7 @@
 		* @type {Object}
 		*/
 		
-		var currentSong = null;
+		SongPlayer.currentSong = null;
 		
 		/**
  		* @desc Buzz object audio file
@@ -55,18 +55,22 @@
 		}
 		
 		SongPlayer.play = function(song) {
-			if (currentSong !== song) {
+			song = song || SongPlayer.currentSong;
+			if (SongPlayer.currentSong !== song) {
 				setSong(song);
 				playSong(song);
 			} 
-			else if (currentSong === song) {
+			else if (SongPlayer.currentSong === song) {
+				console.log(song);
+				console.log(SongPlayer.currentSong);
 				if (currentBuzzObject.isPaused()) {
-					currentBuzzObject.play();
+					playSong(song);
 				}
 			}
 		 };
 		
 		SongPlayer.pause = function(song) {
+			song = song || SongPlayer.currentSong;
 			currentBuzzObject.pause();
 			song.playing = false;
 		}
