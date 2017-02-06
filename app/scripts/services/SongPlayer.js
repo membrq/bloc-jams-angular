@@ -1,5 +1,5 @@
 (function() {
-    function SongPlayer() {
+    function SongPlayer(Fixtures) {
 		
 		/**
 		* @desc SongPlayer variable created as empty hash
@@ -7,6 +7,12 @@
 		*/
 		
         var SongPlayer = {};
+		
+		var currentAlbum = Fixtures.getAlbum();
+		
+		var getSongIndex = function(song) {
+			return currentAlbum.songs.indexOf(song);
+		};
 		
 		/**
 		* @desc currentSong object set to null
@@ -29,8 +35,7 @@
 		
 		var setSong = function(song) {
     		if (currentBuzzObject) {
-        		currentBuzzObject.stop();
-        		currentSong.playing = null;
+        		stopSong();
     		}
  
     		currentBuzzObject = new buzz.sound(song.audioUrl, {
@@ -77,8 +82,43 @@
 		 
          return SongPlayer;
      }
+	
+	SongPlayer.previous = function() {
+     	var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+     	currentSongIndex--;
+		
+		if (currentSongIndex < 0) {
+         	//currentBuzzObject.stop();
+         	//SongPlayer.currentSong.playing = null;
+			stopSong();
+     	} else {
+         	var song = currentAlbum.songs[currentSongIndex];
+         	setSong(song);
+         	playSong(song);
+     	}
+ 	};
+	
+	SongPlayer.next = function() {
+     	var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+     	currentSongIndex++;
+		
+		if (currentSongIndex < 0) {
+         	//currentBuzzObject.stop();
+         	//SongPlayer.currentSong.playing = null;
+			stopSong();
+     	} else {
+         	var song = currentAlbum.songs[currentSongIndex];
+         	setSong(song);
+         	playSong(song);
+     	}
+ 	};
+	
+	var stopSong = function(song) {
+		currentBuzzObject.stop();
+		song.playing = null;
+	};
  
-     angular
+    angular
          .module('blocJams')
-         .factory('SongPlayer', SongPlayer);
+         .factory('SongPlayer', ['Fixtures', SongPlayer]);
  })();
