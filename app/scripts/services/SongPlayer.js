@@ -27,6 +27,8 @@
  		*/
  		SongPlayer.currentTime = null;
 		
+		SongPlayer.volume = null;
+		
 		/**
  		* @desc Buzz object audio file
  		* @type {Object}
@@ -49,9 +51,17 @@
         		preload: true
     		});
 			
+			currentBuzzObject.setVolume(50);
+			
 			currentBuzzObject.bind('timeupdate', function() {
 				$rootScope.$apply(function() {
 					SongPlayer.currentTime = currentBuzzObject.getTime();
+				});
+			});
+			
+			currentBuzzObject.bind('volumechange', function() {
+				$rootScope.$apply(function() {
+					SongPlayer.volume = currentBuzzObject.getVolume();
 				});
 			});
  
@@ -138,6 +148,12 @@
          		currentBuzzObject.setTime(time);
      		}
  		};
+		
+		SongPlayer.setVolume = function(volume) {
+			if (currentBuzzObject) {
+				currentBuzzObject.setVolume(volume)
+			}
+		};
 
         return SongPlayer;
 	}
